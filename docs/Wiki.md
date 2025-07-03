@@ -184,7 +184,7 @@ void init_fdct_cos() {
 ```
 代码通过两次一维 DCT（先对行，再对列）来实现二维 DCT。它使用了预先计算好的余弦值 (`G_FDCT_COS`) 来加速计算。输出的 `output_coeffs` 数组就包含了 64 个 DCT 系数。**需要注意的是**：代码中与计算的FDCT余弦值是按列存储的。
 我们来观察一下，DCT后的数据与原数据对比：
-![afterDCT](https://i-blog.csdnimg.cn/direct/4968970e2ddb42bd90318bf9cc81cc81.png#pic_center =360x)
+![afterDCT](afterDCT.png)
 可以看到，DCT变换后，大部分的重要图像信息集中在了左上角，这时还没有压缩，因为原信号还可以根据DCT后的数据完全还原，下一步的量化才是压缩效率的关键。
 ### 5. 量化 (Quantization)：主要的有损压缩步骤
 
@@ -230,7 +230,7 @@ scale_quant_table(STD_CHROM_QUANT_TBL, encoder.quant_tables[1], encoder.quality_
 质量因子越高，`scale_factor` 越小，量化表的值越接近标准值（或更小），保留的精度越多，图像质量越好，但文件也越大。反之亦然。
 
 我们来观察一下，DCT和量化后的8X8数据对比：
-![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/d4e28102762541e68e5d9fe353194bbf.png#pic_center =360x)
+![afterQuant](afterQuant.png)
 
 可以看到，在量化后，大部分数据都变成了0，这就是压缩率的来源。
 ### 6. Zigzag 扫描：为熵编码做准备
@@ -241,7 +241,7 @@ scale_quant_table(STD_CHROM_QUANT_TBL, encoder.quant_tables[1], encoder.quality_
 
 Zigzag扫描顺寻如下:
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/40bea984f4874dbb8614f221b4b0ee97.png#pic_center)
+![Zigzag](zigZagScan.png)
 **代码实现 (使用 `G_ZIGZAG` 数组):**
 
 代码中使用了一个预定义的 `G_ZIGZAG` 数组来指定扫描顺序。在 `encode_image` 函数对 AC 系数进行编码时，它就按这个顺序读取量化后的系数：
@@ -341,9 +341,9 @@ write_marker(0xD9, encoder.bitstream.fp); // EOI (End of Image)
 
 ### 9. 压缩效果对比
 我们来对比一下，不同质量因子下的压缩图片质量与大小变化，原图如下(2.4MB)：
-![原图](https://i-blog.csdnimg.cn/direct/4f047e7b0b5248a09dce3e603f65de61.png#pic_center =560x)
+![original](original.png)
 质量因子=10，输出大小为36KB，压缩后图片如下(可以看到有明显的模糊)：
-![质量因子=10](https://i-blog.csdnimg.cn/direct/7c96548bcead4f81bda22646bcd5db15.jpeg#pic_center =560x)
+![Quality_10](Quality_10.jpeg)
 质量因子=50，输出大小为109KB，压缩后图片如下(可以看到对比10的质量因子画质有明显的提升，量化系数小了，还原度更高了)：
 ![Quality_50](Quality_50.jpeg)
 

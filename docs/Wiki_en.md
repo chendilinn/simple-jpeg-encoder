@@ -177,7 +177,7 @@ void init_fdct_cos() {
 ```
 The code implements two-dimensional DCT by performing one-dimensional DCT twice (first on rows, then on columns). It uses pre-calculated cosine values (`G_FDCT_COS`) to speed up calculations. The `output_coeffs` array contains the 64 DCT coefficients. **Note:** The pre-calculated FDCT cosine values in the code are stored column-wise. Let's observe the data after DCT compared to the original data:
 
-![afterDCT](https://i-blog.csdnimg.cn/direct/4968970e2ddb42bd90318bf9cc81cc81.png#pic_center =360x)
+![afterDCT](afterDCT.png)
 
 As you can see, after the DCT transformation, most of the important image information is concentrated in the top-left corner. At this point, there is no compression yet, because the original signal can still be fully restored from the DCT data. The next step, quantization, is key to compression efficiency.
 
@@ -231,7 +231,7 @@ scale_quant_table(STD_CHROM_QUANT_TBL, encoder->quant_tables[1], encoder->qualit
 The higher the quality factor, the smaller the `scale_factor`, and the closer the quantization table values are to the standard values (or smaller), retaining more precision, resulting in better image quality but a larger file. The opposite is also true.
 
 Let's observe the 8x8 data after DCT and quantization:
-![afterquant](https://i-blog.csdnimg.cn/direct/d4e28102762541e68e5d9fe353194bbf.png#pic_center =360x)
+![afterQuant](afterQuant.png)
 
 As you can see, after quantization, most of the data becomes 0, which is the source of compression ratio.
 
@@ -243,7 +243,7 @@ After quantization, the 8x8 coefficient matrix often contains many zeros, especi
 
 Zigzag scan order is as follows:
 
-![ZigZag](https://i-blog.csdnimg.cn/direct/40bea984f4874dbb8614f221b4b0ee97.png#pic_center)
+![Zigzag](zigZagScan.png)
 
 **Code Implementation (using `G_ZIGZAG` array):**
 
@@ -345,11 +345,11 @@ These `write_` functions use helper functions like `write_byte`, `write_word`, `
 
 Let's compare the image quality and size changes with different quality factors. The original image is as follows (2.4MB):
 
-![Original Image](https://i-blog.csdnimg.cn/direct/4f047e7b0b5248a09dce3e603f65de61.png#pic_center =560x)
+![original](original.png)
 
 Quality factor = 10, output size is 36KB. The compressed image is as follows (you can see obvious blurring):
 
-![Quality Factor = 10](https://i-blog.csdnimg.cn/direct/7c96548bcead4f81bda22646bcd5db15.jpeg#pic_center =560x)
+![Quality_10](Quality_10.jpeg)
 
 Quality factor = 50, output size is 109KB. The compressed image is as follows (you can see a significant improvement in image quality compared to quality factor 10, with smaller quantization coefficients and higher fidelity):
 
