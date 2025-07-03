@@ -1,4 +1,4 @@
-[English](README.md) | [简体中文](README.zh-CN.md)
+[English](README.md) | [简体中文](README.zh-CN.md) | [Wiki (中文)](docs/Wiki.md) | [Wiki (English)](docs/Wiki_en.md)
 
 # A Simple JPEG Encoder in C
 

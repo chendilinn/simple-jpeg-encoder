@@ -1,4 +1,4 @@
-[English](README.md) | 简体中文
+[English](README.md) | 简体中文 | [Wiki (中文)](docs/Wiki.md) | [Wiki (English)](docs/Wiki_en.md)
 
 # 一个简单的C语言JPEG编码器
 
